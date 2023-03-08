@@ -5,39 +5,34 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
+[RequireComponent(typeof(CanvasGroup))]
 public class Pipe : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
-    [SerializeField]
     private Canvas canvas;
-
+    private CanvasGroup canvasGroup;
     private RectTransform rectTransform;
     
     public void OnBeginDrag(PointerEventData eventData)
     {
-        GetComponent<CanvasGroup>().blocksRaycasts = false;
-        Debug.Log("Begin Drag");
+        canvasGroup.blocksRaycasts = false;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
-        Debug.Log("Dragging");
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        GetComponent<CanvasGroup>().blocksRaycasts = true;
-        Debug.Log("End Drag");
+        canvasGroup.blocksRaycasts = true;
     }
 
     void Awake()
     {
-        rectTransform = this.GetComponent<RectTransform>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        rectTransform = GetComponent<RectTransform>();
+        rectTransform.sizeDelta = new Vector2(Slot.size, Slot.size);
+        canvasGroup = GetComponent<CanvasGroup>();
+        canvas = FindObjectOfType<Canvas>();
+        transform.SetParent(canvas.transform, false);
     }
 }

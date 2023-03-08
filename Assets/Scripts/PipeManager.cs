@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class PipeManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private Slot slotPrefab;
+    [SerializeField]
+    private Pipe pipePrefab;
+
+    [SerializeField]
+    private int n = 10;
+
+    private Slot[,] slots;
+    
+    private void InitializeSlots()
     {
-        
+        slots = new Slot[n, n];
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                slots[i, j] = Instantiate(slotPrefab, new Vector3(Slot.size * j - (n/2) * Slot.size, Slot.size * i - (n/2) * Slot.size, 0), Quaternion.identity);
     }
 
-    // Update is called once per frame
-    void Update()
+    void Awake()
     {
-        
+        InitializeSlots();
+        Instantiate(pipePrefab);
     }
 }
